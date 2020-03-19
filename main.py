@@ -9,10 +9,11 @@ def function(x):
 
 def multifunction(x, y):
     # return (x * x - 2 * y) / (2 * x)
-    return y - 2 * x / y
+    # return y - 2 * x / y
     # return x + y
     # return (y - 4 * x ** 3) / x
     # return y * tan(x) + sin(x)
+    return -50 * (y + cos(x))
 
 
 def accuracy(answer, real):
@@ -40,7 +41,7 @@ def accuracy(answer, real):
 #     # real.append(3 * exp(-2 * x[i]) / 4 + x[i] * x[i] / 2 - x[i] / 2 + 1 / 4)
 #     # real.append(exp(x[i]) - x[i] - 1)
 #     # real.append(1 / (3 * x1[i] / 2 - x1[i] * x1[i] / 2))
-#     real.append((1 - cos(2 * x1[i])) / cos(x1[i]))
+#     real.append((1 - cos(2 * x1[i])) / (4*cos(x1[i])))
 # print(y1[len(y1) - 1])
 # print(y2[len(y2) - 1])
 # print(y3[len(y3) - 1])
@@ -52,14 +53,36 @@ def accuracy(answer, real):
 # plt.plot(x1, real)
 # plt.show()
 
-x, y = diff_equations.method_of_euler_fourth_order(multifunction, 100, 0, 5, 1, 1/3 - 0.01, 2/3 - 0.001)
-real = []
-for i in range(101):
-    real.append(sqrt(2 * x[i] + 1))
-print(y[len(y) - 1])
-print(f'real: {real[len(real) - 1]}')
-print(accuracy(y, real))
 
-plt.plot(x, y)
-plt.plot(x, real)
+# n0 = 20
+# x1, y1, n = diff_equations.method_of_euler_fourth_order(multifunction, n0, 0, 10, 0, alpha2=1 / 2, alpha3=0,
+#                                                         c3=1 / 6, epsilon=0.000001)
+# print(f'n = {n}')
+# real = []
+# for i in range(n + 1):
+#     real.append(((-50) * (50 * cos(x1[i]) + sin(x1[i])) + 2500 * exp((-50) * x1[i])) / 2501)
+#     # real.append(sqrt(2 * x1[i] + 1))
+#     # real.append((1 - cos(2 * x1[i])) / (4 * cos(x1[i])))
+# print(y1[len(y1) - 1])
+# print(f'real: {real[len(real) - 1]}')
+# print(accuracy(y1, real))
+#
+# plt.plot(x1, y1)
+# plt.plot(x1, real)
+# plt.show()
+
+n0 = 20
+x1, y1, n = diff_equations.method_of_adams_fourth_order(multifunction, n0, 0, 10, 0, epsilon=0.000001)
+print(f'n = {n}')
+real = []
+for i in range(n + 1):
+    real.append((-50 * (50 * cos(x1[i]) + sin(x1[i])) + 2500 * exp(-50 * x1[i])) / 2501)
+    # real.append(sqrt(2 * x1[i] + 1))
+    # real.append((1 - cos(2 * x1[i])) / (4 * cos(x1[i])))
+print(y1[len(y1) - 1])
+print(f'real: {real[len(real) - 1]}')
+print(accuracy(y1, real))
+
+plt.plot(x1, y1)
+plt.plot(x1, real)
 plt.show()
