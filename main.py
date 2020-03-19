@@ -16,11 +16,11 @@ def multifunction(x, y):
     return -50 * (y + cos(x))
 
 
-def multifunction1(x, y):
+def multifunction1(t, x, y):
     return x - 2 * y
 
 
-def multifunction2(x, y):
+def multifunction2(t, x, y):
     return x - y
 
 
