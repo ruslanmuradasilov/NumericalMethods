@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def method_of_euler(multifunction1, multifunction2, n, a, b, y10, y20, epsilon=None):
     if epsilon == None:
         h = (b - a) / n
@@ -120,4 +123,73 @@ def method_of_euler_fourth_order(multifunction1, multifunction2, n, a, b, y10, y
                 sum2 += (result12[j] - result22[2 * j]) ** 2
             if sum1 < epsilon and sum2 < epsilon:
                 return x2, result21, result22, i * 2 * n
+            i *= 2
+
+
+def method_of_adams_third_order(multifunctions, n, a, b, y0, epsilon=None):
+    if epsilon == None:
+        h = (b - a) / n
+        func_answers = np.zeros((multifunctions.shape[0], n + 1))
+        t = [a, ]
+        for i in range(n):
+            t.append(t[i] + h)
+        for i in range(y0.shape[0]):
+            for j in range(y0.shape[1]):
+                if j != 0:
+                    y0[i][j] = y0[i][j - 1] + multifunctions[i](t[i], y0[:, j - 1]) * h
+                func_answers[i][j] = y0[i][j]
+
+        for j in range(3, n + 1):
+            for i in range(func_answers.shape[0]):
+                func_answers[i][j] = func_answers[i][j - 1] + h * (
+                        23 * multifunctions[i](t[j - 1], func_answers[:, j - 1])
+                        - 16 * multifunctions[i](t[j - 2], func_answers[:, j - 2])
+                        + 5 * multifunctions[i](t[j - 3], func_answers[:, j - 3])) / 12
+        return t, func_answers
+    else:
+        i = 1
+        while True:
+            sum = np.zeros(len(multifunctions))
+            t1, result1 = method_of_adams_third_order(multifunctions, i * n, a, b, y0)
+            t2, result2 = method_of_adams_third_order(multifunctions, i * 2 * n, a, b, y0)
+            for j in range(len(multifunctions)):
+                for k in range(len(t1) - 1):
+                    sum[j] += (result1[j][k] - result2[j][2 * k]) ** 2
+            sum /= n
+            if all(sum < epsilon):
+                return t2, result2, i * 2 * n
+            i *= 2
+
+
+def method_of_adams_fourth_order(multifunctions, n, a, b, y0, epsilon=None):
+    if epsilon == None:
+        h = (b - a) / n
+        func_answers = np.zeros((len(multifunctions), n + 1))
+        t = [a, ]
+        for i in range(n):
+            t.append(t[i] + h)
+        for i in range(y0.shape[0]):
+            for j in range(y0.shape[1]):
+                if j != 0:
+                    y0[i][j] = y0[i][j - 1] + multifunctions[i](t[i], y0[:, j - 1]) * h
+                func_answers[i][j] = y0[i][j]
+
+        for j in range(4, n + 1):
+            for i in range(func_answers.shape[0]):
+                func_answers[i][j] = func_answers[i][j - 1] + h * (55 * multifunctions[i](t[j - 1], func_answers[:, j - 1]) -
+                            59 * multifunctions[i](t[j - 2], func_answers[:, j - 2]) + 37 *multifunctions[i](t[j - 3], func_answers[:, j - 3]) -
+                            9 * multifunctions[i](t[j - 4], func_answers[:, j - 4])) / 24
+        return t, func_answers
+    else:
+        i = 1
+        while True:
+            sum = np.zeros(len(multifunctions))
+            t1, result1 = method_of_adams_fourth_order(multifunctions, i * n, a, b, y0)
+            t2, result2 = method_of_adams_fourth_order(multifunctions, i * 2 * n, a, b, y0)
+            for j in range(len(multifunctions)):
+                for k in range(len(t1) - 1):
+                    sum[j] += (result1[j][k] - result2[j][2 * k]) ** 2
+            sum /= n
+            if all(sum < epsilon):
+                return t2, result2, i * 2 * n
             i *= 2

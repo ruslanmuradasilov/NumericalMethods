@@ -1,5 +1,6 @@
 from ChM import integration, multidimensional_integration, diff_equations, systems_of_de
 import matplotlib.pyplot as plt
+import numpy as np
 from math import sin, cos, sqrt, exp, log, e, fabs, tan
 
 
@@ -16,12 +17,12 @@ def multifunction(x, y):
     return -50 * (y + cos(x))
 
 
-def multifunction1(t, x, y):
-    return x - 2 * y
+def multifunction1(t, y):
+    return y[0] - 2 * y[1]
 
 
-def multifunction2(t, x, y):
-    return x - y
+def multifunction2(t, y):
+    return y[0] - y[1]
 
 
 def accuracy(answer, real):
@@ -79,15 +80,18 @@ def accuracy(answer, real):
 # plt.plot(x1, real)
 # plt.show()
 
-n0 = 20
-t1, y11, y21, n1 = systems_of_de.method_of_euler(multifunction1, multifunction2, n0, 0, 5, 1, 2, epsilon=0.001)
-print(f'n1 = {n1}')
-t2, y12, y22, n2 = systems_of_de.method_of_euler_second_order(multifunction1, multifunction2, n0, 0, 5, 1, 2, epsilon=0.001)
-print(f'n2 = {n2}')
-t3, y13, y23, n3 = systems_of_de.method_of_euler_third_order(multifunction1, multifunction2, n0, 0, 5, 1, 2, epsilon=0.001)
-print(f'n3 = {n3}')
-t4, y14, y24, n4 = systems_of_de.method_of_euler_fourth_order(multifunction1, multifunction2, n0, 0, 5, 1, 2, epsilon=0.001)
-print(f'n4 = {n4}')
+# n0 = 20
+# t1, y11, y21, n1 = systems_of_de.method_of_euler(multifunction1, multifunction2, n0, 0, 5, 1, 2, epsilon=0.001)
+# print(f'n1 = {n1}')
+# t2, y12, y22, n2 = systems_of_de.method_of_euler_second_order(multifunction1, multifunction2, n0, 0, 5, 1, 2,
+#                                                               epsilon=0.001)
+# print(f'n2 = {n2}')
+# t3, y13, y23, n3 = systems_of_de.method_of_euler_third_order(multifunction1, multifunction2, n0, 0, 5, 1, 2,
+#                                                              epsilon=0.001)
+# print(f'n3 = {n3}')
+# t4, y14, y24, n4 = systems_of_de.method_of_euler_fourth_order(multifunction1, multifunction2, n0, 0, 5, 1, 2,
+#                                                               epsilon=0.001)
+# print(f'n4 = {n4}')
 # real1, real2 = [], []
 # for i in range(n4 + 1):
 #     real1.append(cos(t4[i]) - 3 * sin(t4[i]))
@@ -102,4 +106,28 @@ print(f'n4 = {n4}')
 # # plt.plot(x1, y2)
 # plt.plot(t4, real1)
 # # plt.plot(x1, real2)
+# plt.show()
+
+n0 = 20
+y0 = np.zeros((2, 3))
+y0[0][0] = 1
+y0[1][0] = 2
+
+multifunctions = np.array([multifunction1, multifunction2])
+t1, y1, n1 = systems_of_de.method_of_adams_third_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
+
+y0 = np.zeros((2, 4))
+y0[0][0] = 1
+y0[1][0] = 2
+
+t2, y2, n2 = systems_of_de.method_of_adams_fourth_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
+
+print(f'n = {n1}')
+print(f'n = {n2}')
+# real_y1, real_y2 = [], []
+# for i in range(len(t2)):
+#     real_y1.append(cos(t2[i]) - 3 * sin(t2[i]))
+#     real_y2.append(2 * cos(t2[i]) - sin(t2[i]))
+# plt.plot(t2, y2[0])
+# plt.plot(t2, real_y1)
 # plt.show()
