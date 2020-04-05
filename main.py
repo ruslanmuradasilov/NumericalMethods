@@ -1,4 +1,4 @@
-from ChM import integration, multidimensional_integration, diff_equations, systems_of_de
+from ChM import integration, multidimensional_integration, diff_equations, diff_2_equations, systems_of_de
 import matplotlib.pyplot as plt
 import numpy as np
 from math import sin, cos, sqrt, exp, log, e, fabs, tan
@@ -25,6 +25,21 @@ def multifunction2(t, y):
     return y[0] - y[1]
 
 
+def p(x):
+    return x
+    # return tan(x)
+
+
+def q(x):
+    return -0.5 / x
+    # return cos(x) ** 2
+
+
+def f(x):
+    return 1
+    # return 0
+
+
 def accuracy(answer, real):
     sum = 0
     for i in range(len(answer)):
@@ -35,6 +50,7 @@ def accuracy(answer, real):
 # Integration
 
 # print(multidimensional_integration.method_simple(multifunction, 200, 100, -1, 1, 0, 1))
+
 
 # Diff_equations
 
@@ -80,6 +96,9 @@ def accuracy(answer, real):
 # plt.plot(x1, real)
 # plt.show()
 
+
+# Systems of diff_equations
+
 # n0 = 20
 # t1, y11, y21, n1 = systems_of_de.method_of_euler(multifunction1, multifunction2, n0, 0, 5, 1, 2, epsilon=0.001)
 # print(f'n1 = {n1}')
@@ -108,26 +127,50 @@ def accuracy(answer, real):
 # # plt.plot(x1, real2)
 # plt.show()
 
-n0 = 20
-y0 = np.zeros((2, 3))
-y0[0][0] = 1
-y0[1][0] = 2
-
-multifunctions = np.array([multifunction1, multifunction2])
-t1, y1, n1 = systems_of_de.method_of_adams_third_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
-
-y0 = np.zeros((2, 4))
-y0[0][0] = 1
-y0[1][0] = 2
-
-t2, y2, n2 = systems_of_de.method_of_adams_fourth_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
-
-print(f'n = {n1}')
-print(f'n = {n2}')
+# n0 = 20
+# y0 = np.zeros((2, 3))
+# y0[0][0] = 1
+# y0[1][0] = 2
+#
+# multifunctions = np.array([multifunction1, multifunction2])
+# t1, y1, n1 = systems_of_de.method_of_adams_third_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
+#
+# y0 = np.zeros((2, 4))
+# y0[0][0] = 1
+# y0[1][0] = 2
+#
+# t2, y2, n2 = systems_of_de.method_of_adams_fourth_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
+#
+# print(f'n = {n1}')
+# print(f'n = {n2}')
 # real_y1, real_y2 = [], []
 # for i in range(len(t2)):
 #     real_y1.append(cos(t2[i]) - 3 * sin(t2[i]))
 #     real_y2.append(2 * cos(t2[i]) - sin(t2[i]))
 # plt.plot(t2, y2[0])
 # plt.plot(t2, real_y1)
+# plt.show()
+
+
+# Diff_equations_2_order
+#     y'' + p(x)y' + q(x)y = f(x)
+#     alpha11*y(x0) + alpha12*y'(x0) = beta1
+#     alpha21*y(xn) + alpha22*y'(xn) = beta2
+
+# func_arr = [p, q, f]
+
+# n, x, y = diff_2_equations.finite_difference_method(func_arr, n=20, x0=0, xn=1, alpha11=1, alpha12=0, beta1=1,
+#                                                     alpha21=1, alpha22=0, beta2=10, eps=0.001)
+# real = []
+# c = (10 - cos(sin(1))) / sin(sin(1))
+# for i in range(len(x)):
+#     real.append(cos(sin(x[i])) + c * sin(sin(x[i])))
+# plt.plot(x, y)
+# plt.plot(x, real)
+# plt.show()
+
+# x, y = diff_2_equations.finite_difference_method(func_arr, n=3, x0=2, xn=2.3, alpha11=1, alpha12=2, beta1=1,
+#                                                     alpha21=1, alpha22=0, beta2=2.15)
+# print(y)
+# plt.plot(x, y)
 # plt.show()
