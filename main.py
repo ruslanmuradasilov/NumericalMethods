@@ -1,7 +1,9 @@
-from ChM import integration, multidimensional_integration, diff_equations, diff_2_equations, systems_of_de
+from ChM import integration, multidimensional_integration
+from ChM import diff_equations, systems_of_de, diff_2_equations, partial_diff_equations
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
-from math import sin, cos, sqrt, exp, log, e, fabs, tan
+from math import sin, cos, sqrt, exp, log, e, fabs, tan, pi
 
 
 def function(x):
@@ -25,21 +27,6 @@ def multifunction2(t, y):
     return y[0] - y[1]
 
 
-def p(x):
-    return x
-    # return tan(x)
-
-
-def q(x):
-    return -0.5 / x
-    # return cos(x) ** 2
-
-
-def f(x):
-    return 1
-    # return 0
-
-
 def accuracy(answer, real):
     sum = 0
     for i in range(len(answer)):
@@ -47,12 +34,12 @@ def accuracy(answer, real):
     return sum
 
 
-# Integration
+                                               # Integration
 
 # print(multidimensional_integration.method_simple(multifunction, 200, 100, -1, 1, 0, 1))
 
 
-# Diff_equations
+                                              # Diff_equations
 
 # x1, y1 = diff_equations.method_of_euler_third_order(multifunction, 100, 0, 1.5, 0, 1, 1 / 2)
 # x2, y2 = diff_equations.method_of_euler_third_order(multifunction, 100, 0, 1.5, 0, 1 / 2, 1)
@@ -97,7 +84,7 @@ def accuracy(answer, real):
 # plt.show()
 
 
-# Systems of diff_equations
+                                       # Systems of diff_equations
 
 # n0 = 20
 # t1, y11, y21, n1 = systems_of_de.method_of_euler(multifunction1, multifunction2, n0, 0, 5, 1, 2, epsilon=0.001)
@@ -152,10 +139,27 @@ def accuracy(answer, real):
 # plt.show()
 
 
-# Diff_equations_2_order
+                                       # Diff_equations_2_order
+
 #     y'' + p(x)y' + q(x)y = f(x)
 #     alpha11*y(x0) + alpha12*y'(x0) = beta1
 #     alpha21*y(xn) + alpha22*y'(xn) = beta2
+
+
+def p(x):
+    return x
+    # return tan(x)
+
+
+def q(x):
+    return -0.5 / x
+    # return cos(x) ** 2
+
+
+def f(x):
+    return 1
+    # return 0
+
 
 # func_arr = [p, q, f]
 
@@ -174,3 +178,44 @@ def accuracy(answer, real):
 # print(y)
 # plt.plot(x, y)
 # plt.show()
+
+
+                                        # Heat-conduct equation
+
+# du/dt = a * d^2u/dx^2
+# 0 <= x <= l, 0 <= t <= T, n, m
+# u(x, 0) = f(x)
+# u(0, t) = 0, u(l, t) = 0
+
+def uxt0(x):
+    return 28 * sin(2 * pi * x) + 5 * sin(3 * pi * x)
+
+
+def ux0t(t):
+    return 0
+
+
+def uxnt(t):
+    return 0
+
+
+# t, x, u = partial_diff_equations.heat_conduct_equation_explicit_scheme(a_coef=4, T=10, m=100, l=2, n=20, uxt0 = uxt0, ux0t=ux0t, uxnt=uxnt)
+# t, x, u = partial_diff_equations.heat_conduct_equation_implicit_scheme(a_coef=4, T=10, m=100, l=2, n=20, uxt0 = uxt0, ux0t=ux0t, uxnt=uxnt)
+# t, x, u = partial_diff_equations.heat_conduct_equation_implicit_scheme_common(a_coef=4, T=10, m=100, l=2, n=20, uxt0=uxt0, ux0t=ux0t, uxnt=uxnt, beta=1, delta=1)
+t, x, u = partial_diff_equations.heat_conduct_equation_semi_explicit_scheme(a_coef=4, T=10, m=100, l=2, n=20, uxt0=uxt0,
+                                                                            ux0t=ux0t, uxnt=uxnt, teta=0.75)
+xgrid, tgrid = np.meshgrid(x, t)
+
+ureal = np.zeros((len(t), len(x)))
+for i in range(ureal.shape[0]):
+    for j in range(ureal.shape[1]):
+        ureal[i][j] = 28 * exp(-16 * pi * pi * t[i]) * sin(2 * pi * x[j]) + 5 * exp(-36 * pi * pi * t[i]) * sin(
+            3 * pi * x[j])
+
+fig1 = plt.figure()
+ax = fig1.add_subplot(111, projection='3d')
+Axes3D.plot_surface(ax, X=xgrid, Y=tgrid, Z=u)
+fig2 = plt.figure()
+ax = fig2.add_subplot(111, projection='3d')
+Axes3D.plot_surface(ax, X=xgrid, Y=tgrid, Z=ureal)
+plt.show()
