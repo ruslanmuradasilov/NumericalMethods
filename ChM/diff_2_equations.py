@@ -1,4 +1,5 @@
 import numpy as np
+from math import fabs
 
 
 def tridiagonal_matrix_algorithm(a, b, c, d):
@@ -59,3 +60,36 @@ def finite_difference_method(func_arr, n, x0, xn, alpha11, alpha12, beta1, alpha
             if sum < eps:
                 return i * 2 * n, x2, answer2
             i = i * 2
+
+
+# def shoot_method(func_arr, n, x0, xn, alpha11, alpha12, beta1, alpha21, alpha22, beta2, eps):
+#     x = []
+#     y = []
+#     z = []
+#     h = (xn - x0) / n
+#     for i in range(n):
+#         x.append(x0 + h * i)
+#
+#     t = 1
+#     acc = 1
+#
+#     def shoot(ksi):
+#         y.clear()
+#         z.clear()
+#         y.append(c1*ksi + usl1)
+#         z.append(ksi)
+#         for i in range(n):
+#             y1 = y[i] + 0.5 * h * z[i]
+#             z1 = z[i] + 0.5 * h * g(x[i], y[i], z[i])
+#             y.append(y[i] + h * f(x[i] + 0.5 * h, y1, z1))
+#             z.append(z[i] + h * g(x[i] + 0.5 * h, y1, z1))
+#         return z[n] + c2 * y[n] + usl2
+#
+#     while acc > eps:
+#         sh_xx = shoot(t)
+#         sh_xx_eps = shoot(t + eps * 0.1)
+#         xx1 = t - sh_xx * eps * 0.1 / (sh_xx_eps - sh_xx)
+#
+#         acc = fabs(t - xx1)
+#         t = xx1
+#     return x, y

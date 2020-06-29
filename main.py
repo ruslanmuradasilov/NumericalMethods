@@ -114,29 +114,30 @@ def accuracy(answer, real):
 # # plt.plot(x1, real2)
 # plt.show()
 
-# n0 = 20
 # y0 = np.zeros((2, 3))
 # y0[0][0] = 1
 # y0[1][0] = 2
-#
-# multifunctions = np.array([multifunction1, multifunction2])
+
+multifunctions = np.array([multifunction1, multifunction2])
 # t1, y1, n1 = systems_of_de.method_of_adams_third_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
-#
-# y0 = np.zeros((2, 4))
-# y0[0][0] = 1
-# y0[1][0] = 2
-#
+
+n0 = 10
+y0 = np.zeros((2, 4))
+y0[0][0] = 1
+y0[1][0] = 2
+
 # t2, y2, n2 = systems_of_de.method_of_adams_fourth_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
-#
+t2, y2, n2 = systems_of_de.method_of_adams_fourth_order_with_euler_fourth_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
+
 # print(f'n = {n1}')
-# print(f'n = {n2}')
-# real_y1, real_y2 = [], []
-# for i in range(len(t2)):
-#     real_y1.append(cos(t2[i]) - 3 * sin(t2[i]))
-#     real_y2.append(2 * cos(t2[i]) - sin(t2[i]))
-# plt.plot(t2, y2[0])
-# plt.plot(t2, real_y1)
-# plt.show()
+print(f'n = {n2}')
+real_y1, real_y2 = [], []
+for i in range(len(t2)):
+    real_y1.append(cos(t2[i]) - 3 * sin(t2[i]))
+    real_y2.append(2 * cos(t2[i]) - sin(t2[i]))
+plt.plot(t2, y2[0])
+plt.plot(t2, real_y1)
+plt.show()
 
 
                                        # Diff_equations_2_order
@@ -162,7 +163,7 @@ def f(x):
 
 
 # func_arr = [p, q, f]
-
+#
 # n, x, y = diff_2_equations.finite_difference_method(func_arr, n=20, x0=0, xn=1, alpha11=1, alpha12=0, beta1=1,
 #                                                     alpha21=1, alpha22=0, beta2=10, eps=0.001)
 # real = []
@@ -172,50 +173,105 @@ def f(x):
 # plt.plot(x, y)
 # plt.plot(x, real)
 # plt.show()
-
+#
 # x, y = diff_2_equations.finite_difference_method(func_arr, n=3, x0=2, xn=2.3, alpha11=1, alpha12=2, beta1=1,
 #                                                     alpha21=1, alpha22=0, beta2=2.15)
 # print(y)
 # plt.plot(x, y)
 # plt.show()
 
+func_arr = [p, q, f]
 
-                                        # Heat-conduct equation
+n, x, y = diff_2_equations.shoot_method(func_arr, n=20, x0=0, xn=1, alpha11=1, alpha12=0, beta1=1,
+                                                    alpha21=1, alpha22=0, beta2=10, eps=0.001)
 
+
+#                                         Heat-conduct equation
+#
 # du/dt = a * d^2u/dx^2
 # 0 <= x <= l, 0 <= t <= T, n, m
 # u(x, 0) = f(x)
-# u(0, t) = 0, u(l, t) = 0
+# u(0, t) = fi(t), u(l, t) = psi(t)
+#
+# def uxt0(x):
+#     return cos(2 * x)
+#     # return cos(2*x)
+#
+#
+# def ux0t(t):
+#     return 0
+#     # return 1 - 6*t
+#
+#
+# def uxnt(t):
+#     return 0
+#     # return 0.3624
+#
+#
+# # t, x, u = partial_diff_equations.heat_conduct_equation_explicit_scheme(a_coef=4, T=10, m=100, l=2, n=20, uxt0 = uxt0, ux0t=ux0t, uxnt=uxnt)
+# # t, x, u = partial_diff_equations.heat_conduct_equation_implicit_scheme(a_coef=4, T=10, m=100, l=2, n=20, uxt0 = uxt0, ux0t=ux0t, uxnt=uxnt)
+# t, x, u = partial_diff_equations.heat_conduct_equation_implicit_scheme_common(a_coef=1, T=10, m=100, l=pi, n=100, uxt0=uxt0, ux0t=ux0t, uxnt=uxnt, beta=1, delta=1)
+# # t, x, u = partial_diff_equations.heat_conduct_equation_implicit_scheme_common(a_coef=1, T=3, m=300, l=0.6, n=30, uxt0=uxt0, ux0t=ux0t, uxnt=uxnt, beta=1, delta=1)
+# # t, x, u = partial_diff_equations.heat_conduct_equation_semi_explicit_scheme(a_coef=4, T=10, m=100, l=2, n=20, uxt0=uxt0, ux0t=ux0t, uxnt=uxnt, teta=0.75)
+#
+# xgrid, tgrid = np.meshgrid(x, t)
+#
+# ureal = np.zeros((len(t), len(x)))
+# for i in range(ureal.shape[0]):
+#     for j in range(ureal.shape[1]):
+#         ureal[i][j] = exp(-4 * t[i]) * cos(2 * x[j])
+#
+# fig1 = plt.figure()
+# ax = fig1.add_subplot(111, projection='3d')
+# Axes3D.plot_surface(ax, X=xgrid, Y=tgrid, Z=u)
+# fig2 = plt.figure()
+# ax = fig2.add_subplot(111, projection='3d')
+# Axes3D.plot_surface(ax, X=xgrid, Y=tgrid, Z=ureal)
+# plt.show()
 
-def uxt0(x):
-    return 28 * sin(2 * pi * x) + 5 * sin(3 * pi * x)
 
-
-def ux0t(t):
-    return 0
-
-
-def uxnt(t):
-    return 0
-
-
-# t, x, u = partial_diff_equations.heat_conduct_equation_explicit_scheme(a_coef=4, T=10, m=100, l=2, n=20, uxt0 = uxt0, ux0t=ux0t, uxnt=uxnt)
-# t, x, u = partial_diff_equations.heat_conduct_equation_implicit_scheme(a_coef=4, T=10, m=100, l=2, n=20, uxt0 = uxt0, ux0t=ux0t, uxnt=uxnt)
-# t, x, u = partial_diff_equations.heat_conduct_equation_implicit_scheme_common(a_coef=4, T=10, m=100, l=2, n=20, uxt0=uxt0, ux0t=ux0t, uxnt=uxnt, beta=1, delta=1)
-t, x, u = partial_diff_equations.heat_conduct_equation_semi_explicit_scheme(a_coef=4, T=10, m=100, l=2, n=20, uxt0=uxt0,
-                                                                            ux0t=ux0t, uxnt=uxnt, teta=0.75)
-xgrid, tgrid = np.meshgrid(x, t)
-
-ureal = np.zeros((len(t), len(x)))
-for i in range(ureal.shape[0]):
-    for j in range(ureal.shape[1]):
-        ureal[i][j] = 28 * exp(-16 * pi * pi * t[i]) * sin(2 * pi * x[j]) + 5 * exp(-36 * pi * pi * t[i]) * sin(
-            3 * pi * x[j])
-
-fig1 = plt.figure()
-ax = fig1.add_subplot(111, projection='3d')
-Axes3D.plot_surface(ax, X=xgrid, Y=tgrid, Z=u)
-fig2 = plt.figure()
-ax = fig2.add_subplot(111, projection='3d')
-Axes3D.plot_surface(ax, X=xgrid, Y=tgrid, Z=ureal)
-plt.show()
+#                                                 Wave equation
+#
+# d^2u/dt^2 = a * d^2u/dx^2
+# 0 <= x <= l, t > 0, n, m
+# u(x, 0) = f(x)
+# du(x, 0)/dt = F(x)
+# u(0, t) = fi(t), u(l, t) = psi(t)
+#
+# def uxt0(x):
+#     # return x * (pi - x)
+#     # return sin(3 * x)
+#     return x * (x + 1)
+#
+#
+# def duxt0dt(x):
+#     # return 0
+#     return cos(x)
+#
+#
+# def ux0t(t):
+#     return 0
+#
+#
+# def uxnt(t):
+#     # return 0
+#     return 2 * (t + 1)
+#
+# t, x, u = partial_diff_equations.wave_equation_implicit_scheme_common(a_coef=1, T=4, m=400, l=1, n=100, uxt0=uxt0, duxt0dt=duxt0dt, ux0t=ux0t, uxnt=uxnt, beta=1, delta=1)
+# # t, x, u = partial_diff_equations.wave_equation_implicit_scheme_common(a_coef=1, T=0.1, m=400, l=pi, n=1000, uxt0=uxt0, duxt0dt=duxt0dt, ux0t=ux0t, uxnt=uxnt, beta=1, delta=1)
+# # t, x, u = partial_diff_equations.wave_equation_implicit_scheme_common(a_coef=1, T=5*pi/18, m=5, l=pi, n=9, uxt0=uxt0, duxt0dt=duxt0dt, ux0t=ux0t, uxnt=uxnt, beta=1, delta=1)
+#
+# # print(u)
+# xgrid, tgrid = np.meshgrid(x, t)
+# ureal = np.zeros((len(t), len(x)))
+# for i in range(ureal.shape[0]):
+#     for j in range(ureal.shape[1]):
+#         ureal[i][j] = (exp(3 * t[i]) / 2 + exp(-3 * t[i]) / 2) * sin(3 * x[j])
+#
+# fig1 = plt.figure()
+# ax = fig1.add_subplot(111, projection='3d')
+# Axes3D.plot_surface(ax, X=xgrid, Y=tgrid, Z=u)
+# fig2 = plt.figure()
+# ax = fig2.add_subplot(111, projection='3d')
+# Axes3D.plot_surface(ax, X=xgrid, Y=tgrid, Z=ureal)
+# plt.show()
