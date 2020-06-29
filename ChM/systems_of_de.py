@@ -27,7 +27,7 @@ def method_of_euler(multifunction1, multifunction2, n, a, b, y10, y20, epsilon=N
             i *= 2
 
 
-def method_of_euler_second_order(multifunction1, multifunction2, n, a, b, y10, y20, epsilon=None):
+def method_of_runge_kutta_second_order(multifunction1, multifunction2, n, a, b, y10, y20, epsilon=None):
     if epsilon == None:
         h = (b - a) / n
         t, y1, y2, k11, k21, k12, k22 = [], [], [], [], [], [], []
@@ -47,9 +47,9 @@ def method_of_euler_second_order(multifunction1, multifunction2, n, a, b, y10, y
         i = 1
         while True:
             sum1, sum2 = 0, 0
-            x1, result11, result12 = method_of_euler_second_order(multifunction1, multifunction2, i * n, a, b, y10, y20)
-            x2, result21, result22 = method_of_euler_second_order(multifunction1, multifunction2, i * 2 * n, a, b, y10,
-                                                                  y20)
+            x1, result11, result12 = method_of_runge_kutta_second_order(multifunction1, multifunction2, i * n, a, b, y10, y20)
+            x2, result21, result22 = method_of_runge_kutta_second_order(multifunction1, multifunction2, i * 2 * n, a, b, y10,
+                                                                        y20)
             for j in range(len(x1) - 1):
                 sum1 += (result11[j] - result21[2 * j]) ** 2
                 sum2 += (result12[j] - result22[2 * j]) ** 2
@@ -58,7 +58,7 @@ def method_of_euler_second_order(multifunction1, multifunction2, n, a, b, y10, y
             i *= 2
 
 
-def method_of_euler_third_order(multifunction1, multifunction2, n, a, b, y10, y20, epsilon=None):
+def method_of_runge_kutta_third_order(multifunction1, multifunction2, n, a, b, y10, y20, epsilon=None):
     if epsilon == None:
         h = (b - a) / n
         t, y1, y2, k11, k21, k12, k22, k13, k23 = [], [], [], [], [], [], [], [], []
@@ -80,9 +80,9 @@ def method_of_euler_third_order(multifunction1, multifunction2, n, a, b, y10, y2
         i = 1
         while True:
             sum1, sum2 = 0, 0
-            x1, result11, result12 = method_of_euler_third_order(multifunction1, multifunction2, i * n, a, b, y10, y20)
-            x2, result21, result22 = method_of_euler_third_order(multifunction1, multifunction2, i * 2 * n, a, b, y10,
-                                                                 y20)
+            x1, result11, result12 = method_of_runge_kutta_third_order(multifunction1, multifunction2, i * n, a, b, y10, y20)
+            x2, result21, result22 = method_of_runge_kutta_third_order(multifunction1, multifunction2, i * 2 * n, a, b, y10,
+                                                                       y20)
             for j in range(len(x1) - 1):
                 sum1 += (result11[j] - result21[2 * j]) ** 2
                 sum2 += (result12[j] - result22[2 * j]) ** 2
@@ -91,7 +91,7 @@ def method_of_euler_third_order(multifunction1, multifunction2, n, a, b, y10, y2
             i *= 2
 
 
-def method_of_euler_fourth_order(multifunction1, multifunction2, n, a, b, y10, y20, epsilon=None):
+def method_of_runge_kutta_fourth_order(multifunction1, multifunction2, n, a, b, y10, y20, epsilon=None):
     if epsilon == None:
         h = (b - a) / n
         t, y1, y2, k11, k21, k12, k22, k13, k23, k14, k24 = [], [], [], [], [], [], [], [], [], [], []
@@ -115,9 +115,9 @@ def method_of_euler_fourth_order(multifunction1, multifunction2, n, a, b, y10, y
         i = 1
         while True:
             sum1, sum2 = 0, 0
-            x1, result11, result12 = method_of_euler_fourth_order(multifunction1, multifunction2, i * n, a, b, y10, y20)
-            x2, result21, result22 = method_of_euler_fourth_order(multifunction1, multifunction2, i * 2 * n, a, b, y10,
-                                                                  y20)
+            x1, result11, result12 = method_of_runge_kutta_fourth_order(multifunction1, multifunction2, i * n, a, b, y10, y20)
+            x2, result21, result22 = method_of_runge_kutta_fourth_order(multifunction1, multifunction2, i * 2 * n, a, b, y10,
+                                                                        y20)
             for j in range(len(x1) - 1):
                 sum1 += (result11[j] - result21[2 * j]) ** 2
                 sum2 += (result12[j] - result22[2 * j]) ** 2
@@ -197,7 +197,7 @@ def method_of_adams_fourth_order(multifunctions, n, a, b, y0, epsilon=None):
             i *= 2
 
 
-def method_of_adams_fourth_order_with_euler_fourth_order(multifunctions, n, a, b, y0, epsilon=None):
+def method_of_adams_fourth_order_with_runge_kutta_fourth_order(multifunctions, n, a, b, y0, epsilon=None):
     if epsilon == None:
         h = (b - a) / n
         t, k11, k21, k12, k22, k13, k23, k14, k24 = [], [], [], [], [], [], [], [], []
@@ -235,8 +235,8 @@ def method_of_adams_fourth_order_with_euler_fourth_order(multifunctions, n, a, b
         i = 1
         while True:
             sum = np.zeros(len(multifunctions))
-            t1, result1 = method_of_adams_fourth_order(multifunctions, i * n, a, b, y0)
-            t2, result2 = method_of_adams_fourth_order(multifunctions, i * 2 * n, a, b, y0)
+            t1, result1 = method_of_adams_fourth_order_with_runge_kutta_fourth_order(multifunctions, i * n, a, b, y0)
+            t2, result2 = method_of_adams_fourth_order_with_runge_kutta_fourth_order(multifunctions, i * 2 * n, a, b, y0)
             for j in range(len(multifunctions)):
                 for k in range(len(t1) - 1):
                     sum[j] += (result1[j][k] - result2[j][2 * k]) ** 2

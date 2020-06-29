@@ -41,10 +41,10 @@ def accuracy(answer, real):
 
                                               # Diff_equations
 
-# x1, y1 = diff_equations.method_of_euler_third_order(multifunction, 100, 0, 1.5, 0, 1, 1 / 2)
-# x2, y2 = diff_equations.method_of_euler_third_order(multifunction, 100, 0, 1.5, 0, 1 / 2, 1)
-# x3, y3 = diff_equations.method_of_euler_third_order(multifunction, 100, 0, 1.5, 0, 1, 2)
-# x4, y4 = diff_equations.method_of_euler_third_order(multifunction, 100, 0, 1.5, 0, 2 / 3, 1 / 3)
+# x1, y1 = diff_equations.method_of_runge_kutta_third_order(multifunction, 100, 0, 1.5, 0, 1, 1 / 2)
+# x2, y2 = diff_equations.method_of_runge_kutta_third_order(multifunction, 100, 0, 1.5, 0, 1 / 2, 1)
+# x3, y3 = diff_equations.method_of_runge_kutta_third_order(multifunction, 100, 0, 1.5, 0, 1, 2)
+# x4, y4 = diff_equations.method_of_runge_kutta_third_order(multifunction, 100, 0, 1.5, 0, 2 / 3, 1 / 3)
 #
 # real = []
 # for i in range(101):
@@ -67,7 +67,7 @@ def accuracy(answer, real):
 
 
 # n0 = 20
-# x1, y1, n = diff_equations.method_of_euler_fourth_order(multifunction, n0, 0, 10, 0, alpha2=1 / 2, alpha3=0,
+# x1, y1, n = diff_equations.method_of_runge_kutta_fourth_order(multifunction, n0, 0, 10, 0, alpha2=1 / 2, alpha3=0,
 #                                                         c3=1 / 6, epsilon=0.000001)
 # print(f'n = {n}')
 # real = []
@@ -89,13 +89,13 @@ def accuracy(answer, real):
 # n0 = 20
 # t1, y11, y21, n1 = systems_of_de.method_of_euler(multifunction1, multifunction2, n0, 0, 5, 1, 2, epsilon=0.001)
 # print(f'n1 = {n1}')
-# t2, y12, y22, n2 = systems_of_de.method_of_euler_second_order(multifunction1, multifunction2, n0, 0, 5, 1, 2,
+# t2, y12, y22, n2 = systems_of_de.method_of_runge_kutta_second_order(multifunction1, multifunction2, n0, 0, 5, 1, 2,
 #                                                               epsilon=0.001)
 # print(f'n2 = {n2}')
-# t3, y13, y23, n3 = systems_of_de.method_of_euler_third_order(multifunction1, multifunction2, n0, 0, 5, 1, 2,
+# t3, y13, y23, n3 = systems_of_de.method_of_runge_kutta_third_order(multifunction1, multifunction2, n0, 0, 5, 1, 2,
 #                                                              epsilon=0.001)
 # print(f'n3 = {n3}')
-# t4, y14, y24, n4 = systems_of_de.method_of_euler_fourth_order(multifunction1, multifunction2, n0, 0, 5, 1, 2,
+# t4, y14, y24, n4 = systems_of_de.method_of_runge_kutta_fourth_order(multifunction1, multifunction2, n0, 0, 5, 1, 2,
 #                                                               epsilon=0.001)
 # print(f'n4 = {n4}')
 # real1, real2 = [], []
@@ -127,7 +127,7 @@ y0[0][0] = 1
 y0[1][0] = 2
 
 # t2, y2, n2 = systems_of_de.method_of_adams_fourth_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
-t2, y2, n2 = systems_of_de.method_of_adams_fourth_order_with_euler_fourth_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
+t2, y2, n2 = systems_of_de.method_of_adams_fourth_order_with_runge_kutta_fourth_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
 
 # print(f'n = {n1}')
 print(f'n = {n2}')
@@ -180,10 +180,10 @@ def f(x):
 # plt.plot(x, y)
 # plt.show()
 
-func_arr = [p, q, f]
-
-n, x, y = diff_2_equations.shoot_method(func_arr, n=20, x0=0, xn=1, alpha11=1, alpha12=0, beta1=1,
-                                                    alpha21=1, alpha22=0, beta2=10, eps=0.001)
+# func_arr = [p, q, f]
+#
+# n, x, y = diff_2_equations.shoot_method(func_arr, n=20, x0=0, xn=1, alpha11=1, alpha12=0, beta1=1,
+#                                                     alpha21=1, alpha22=0, beta2=10, eps=0.001)
 
 
 #                                         Heat-conduct equation

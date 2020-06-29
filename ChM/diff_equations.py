@@ -21,7 +21,7 @@ def method_of_euler2(multifunction, n, a, b, y0):
     return x, y
 
 
-def method_of_euler_second_order(multifunction, n, a, b, y0, C2):
+def method_of_runge_kutta_second_order(multifunction, n, a, b, y0, C2):
     h = (b - a) / n
     x, y, k1, k2 = [], [], [], []
     C1 = 1 - C2
@@ -36,7 +36,7 @@ def method_of_euler_second_order(multifunction, n, a, b, y0, C2):
     return x, y
 
 
-def method_of_euler_third_order(multifunction, n, a, b, y0, alpha3, alpha2):
+def method_of_runge_kutta_third_order(multifunction, n, a, b, y0, alpha3, alpha2):
     h = (b - a) / n
     x, y, k1, k2, k3 = [], [], [], [], []
     C2 = (alpha3 / 2 - 1 / 3) / (alpha2 * (alpha3 - alpha2))
@@ -56,7 +56,7 @@ def method_of_euler_third_order(multifunction, n, a, b, y0, alpha3, alpha2):
     return x, y
 
 
-def method_of_euler_fourth_order(multifunction, n, a, b, y0, alpha2, alpha3, c3=None, c4=None, epsilon=None):
+def method_of_runge_kutta_fourth_order(multifunction, n, a, b, y0, alpha2, alpha3, c3=None, c4=None, epsilon=None):
     if epsilon == None:
         h = (b - a) / n
         alpha4 = 1
@@ -121,10 +121,10 @@ def method_of_euler_fourth_order(multifunction, n, a, b, y0, alpha2, alpha3, c3=
         i = 1
         while True:
             sum = 0
-            x1, result1 = method_of_euler_fourth_order(multifunction, i * n, a, b, y0, alpha2, alpha3, c3,
-                                                       c4)
-            x2, result2 = method_of_euler_fourth_order(multifunction, i * 2 * n, a, b, y0, alpha2, alpha3,
-                                                       c3, c4)
+            x1, result1 = method_of_runge_kutta_fourth_order(multifunction, i * n, a, b, y0, alpha2, alpha3, c3,
+                                                             c4)
+            x2, result2 = method_of_runge_kutta_fourth_order(multifunction, i * 2 * n, a, b, y0, alpha2, alpha3,
+                                                             c3, c4)
             for j in range(len(x1) - 1):
                 sum += (result1[j] - result2[2 * j]) ** 2
             if sum < epsilon:
