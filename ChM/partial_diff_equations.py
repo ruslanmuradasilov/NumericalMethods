@@ -45,21 +45,21 @@ def heat_conduct_equation_implicit_scheme(a_coef, T, m, l, n, uxt0, ux0t, uxnt):
         u[j][len(x) - 1] = uxnt(t[j])
 
     alpha = a_coef * tau / (h ** 2)
-    a, b, c = [0, ], [-(1 + 2 * alpha), ], []
+    a_coef = np.ones(n) * alpha
+    b = np.ones(n)*(-1 - 2*alpha)
+    c = np.ones(n)*alpha
+    a_coef[1] = 0
+    c[n - 1] = 0
 
-    for i in range(n - 1):
-        a.append(alpha)
-        b.append(-(1 + 2 * alpha))
-        c.append(alpha)
-    c.append(0)
+    # print(len(a), len(b), len(c))
     for i in range(m):
-        d = np.zeros(n - 1)
-        d[0] = -(u[i][0] + alpha * ux0t(t[i + 1]))
-        for j in range(1, n - 2):
+        d = np.zeros(n)
+        d[1] = -(u[i][1] + alpha*ux0t(t[i + 1]))
+        for j in range(2, n - 1):
             d[j] = -u[i][j]
-        d[n - 2] = -(u[i][n - 2] + alpha * uxnt(t[i + 1]))
-        u[i + 1, 1:u.shape[1] - 1] = tridiagonal_matrix_algorithm(a, b, c, d)
-
+        d[n - 1] = -(u[i][n - 1] + alpha*uxnt(t[i + 1]))
+        u[i + 1, 1:u.shape[1] - 1] = tridiagonal_matrix_algorithm(a_coef[1:], b[1:], c[1:], d[1:])
+    # print (d.shape[0])
     return t, x, u
 
 
@@ -129,6 +129,44 @@ def heat_conduct_equation_semi_explicit_scheme(a_coef, T, m, l, n, uxt0, ux0t, u
         for j in range(1, n - 2):
             d[j] = -u[i][j + 1] - (1 - teta) * alpha * (u[i][j + 2] - 2 * u[i][j + 1] + u[i][j])
         d[n - 2] = -(u[i][n - 1] + alpha * u[i + 1][n] + (1 - teta) * alpha * (u[i][n] - 2 * u[i][n - 1] + u[i][n - 2]))
+        u[i + 1, 1:u.shape[1] - 1] = tridiagonal_matrix_algorithm(a, b, c, d)
+
+    return t, x, u
+
+
+def wave_equation_implicit_scheme(a_coef, T, m, l, n, uxt0, duxt0dt, ux0t, uxnt):
+    t, x = [], []
+    tau = T / m
+    h = l / n
+
+    for i in range(m + 1):
+        t.append(i * tau)
+    for j in range(n + 1):
+        x.append(j * h)
+
+    u = np.zeros((len(t), len(x)))
+    for i in range(n + 1):
+        u[0][i] = uxt0(x[i])
+        u[1][i] = uxt0(x[i]) + duxt0dt(x[i]) * tau
+    for j in range(m + 1):
+        u[j][0] = ux0t(t[j])
+        u[j][len(x) - 1] = uxnt(t[j])
+
+    alpha = a_coef * (tau ** 2) / (h ** 2)
+    a, b, c = [0, ], [-(1 + 2 * alpha), ], []
+
+    for i in range(n - 2):
+        a.append(alpha)
+        b.append(-(1 + 2 * alpha))
+        c.append(alpha)
+    c.append(0)
+    print(len(c))
+    for i in range(1, m):
+        d = np.zeros(n - 1)
+        d[0] = -2 * u[i][1] + u[i - 1][1] - alpha * u[i + 1][0]
+        for j in range(1, n - 2):
+            d[j] = u[i - 1][j + 1] - 2 * u[i][j + 1]
+        d[n - 2] = -2 * u[i][n - 1] + u[i][n - 1] - alpha * uxnt(t[i + 1])
         u[i + 1, 1:u.shape[1] - 1] = tridiagonal_matrix_algorithm(a, b, c, d)
 
     return t, x, u
