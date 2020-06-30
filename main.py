@@ -3,7 +3,7 @@ from ChM import diff_equations, systems_of_de, diff_2_equations, partial_diff_eq
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
-from math import sin, cos, sqrt, exp, log, e, fabs, tan, pi
+from math import sin, cos, sqrt, exp, log, e, fabs, tan, pi, trunc
 
 
 def function(x):
@@ -118,26 +118,26 @@ def accuracy(answer, real):
 # y0[0][0] = 1
 # y0[1][0] = 2
 
-multifunctions = np.array([multifunction1, multifunction2])
-# t1, y1, n1 = systems_of_de.method_of_adams_third_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
-
-n0 = 10
-y0 = np.zeros((2, 4))
-y0[0][0] = 1
-y0[1][0] = 2
-
-# t2, y2, n2 = systems_of_de.method_of_adams_fourth_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
-t2, y2, n2 = systems_of_de.method_of_adams_fourth_order_with_runge_kutta_fourth_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
-
-# print(f'n = {n1}')
-print(f'n = {n2}')
-real_y1, real_y2 = [], []
-for i in range(len(t2)):
-    real_y1.append(cos(t2[i]) - 3 * sin(t2[i]))
-    real_y2.append(2 * cos(t2[i]) - sin(t2[i]))
-plt.plot(t2, y2[0])
-plt.plot(t2, real_y1)
-plt.show()
+# multifunctions = np.array([multifunction1, multifunction2])
+# # t1, y1, n1 = systems_of_de.method_of_adams_third_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
+#
+# n0 = 10
+# y0 = np.zeros((2, 4))
+# y0[0][0] = 1
+# y0[1][0] = 2
+#
+# # t2, y2, n2 = systems_of_de.method_of_adams_fourth_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
+# t2, y2, n2 = systems_of_de.method_of_adams_fourth_order_with_runge_kutta_fourth_order(multifunctions, n0, 0, 5, y0, epsilon=0.0000001)
+#
+# # print(f'n = {n1}')
+# print(f'n = {n2}')
+# real_y1, real_y2 = [], []
+# for i in range(len(t2)):
+#     real_y1.append(cos(t2[i]) - 3 * sin(t2[i]))
+#     real_y2.append(2 * cos(t2[i]) - sin(t2[i]))
+# plt.plot(t2, y2[0])
+# plt.plot(t2, real_y1)
+# plt.show()
 
 
                                        # Diff_equations_2_order
@@ -180,10 +180,13 @@ def f(x):
 # plt.plot(x, y)
 # plt.show()
 
-# func_arr = [p, q, f]
-#
-# n, x, y = diff_2_equations.shoot_method(func_arr, n=20, x0=0, xn=1, alpha11=1, alpha12=0, beta1=1,
-#                                                     alpha21=1, alpha22=0, beta2=10, eps=0.001)
+x0 = 0.7
+xn = 1
+h = 0.01
+n = trunc((xn - x0) / h)
+x, y = diff_2_equations.shoot_method(p=p, q=q, f=f, alpha11=1, alpha12=0, betta1=0.5, alpha21=2, alpha22=3, betta2=1.2, x0=x0, xn=xn,
+                    n=n, eps=1e-7)
+print(x, y)
 
 
 #                                         Heat-conduct equation

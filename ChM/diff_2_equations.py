@@ -1,5 +1,6 @@
 import numpy as np
 from math import fabs
+from ChM.systems_of_de import method_of_adams_fourth_order_with_runge_kutta_fourth_order
 
 
 def tridiagonal_matrix_algorithm(a, b, c, d):
@@ -62,34 +63,58 @@ def finite_difference_method(func_arr, n, x0, xn, alpha11, alpha12, beta1, alpha
             i = i * 2
 
 
-# def shoot_method(func_arr, n, x0, xn, alpha11, alpha12, beta1, alpha21, alpha22, beta2, eps):
-#     x = []
-#     y = []
-#     z = []
-#     h = (xn - x0) / n
-#     for i in range(n):
-#         x.append(x0 + h * i)
-#
-#     t = 1
-#     acc = 1
-#
-#     def shoot(ksi):
-#         y.clear()
-#         z.clear()
-#         y.append(c1*ksi + usl1)
-#         z.append(ksi)
-#         for i in range(n):
-#             y1 = y[i] + 0.5 * h * z[i]
-#             z1 = z[i] + 0.5 * h * g(x[i], y[i], z[i])
-#             y.append(y[i] + h * f(x[i] + 0.5 * h, y1, z1))
-#             z.append(z[i] + h * g(x[i] + 0.5 * h, y1, z1))
-#         return z[n] + c2 * y[n] + usl2
-#
-#     while acc > eps:
-#         sh_xx = shoot(t)
-#         sh_xx_eps = shoot(t + eps * 0.1)
-#         xx1 = t - sh_xx * eps * 0.1 / (sh_xx_eps - sh_xx)
-#
-#         acc = fabs(t - xx1)
-#         t = xx1
-#     return x, y
+def adams_method_solve(p, q, f, alpha11, alpha12, betta1, x0, xn, n, t):
+    def z_func(x, funcs):
+        return funcs[0]
+
+    def temp_func(x, funcs):
+        return f(x) - p(x) * funcs[0] - q(x) * funcs[1]
+
+    functions = [temp_func, z_func]
+    n0 = n
+    y0 = np.zeros((2, 4))
+    y0[0][0] = (betta1 - alpha12 * t) / alpha11
+    y0[1][0] = t
+    # func_ans[0] = y(x) func_ans[1]=z(x)
+    return method_of_adams_fourth_order_with_runge_kutta_fourth_order(functions, n0, x0, xn, y0)
+
+
+def find_interval(p, q, f, alpha11, alpha12, betta1, alpha21, alpha22, betta2, x0, xn, n, t_start, step):
+    # Если sgn(G(t)) != sgn(G(-t)) Тогда интревал найден
+    current_t = t_start
+
+    def G(y, z):
+        return alpha21 * y - alpha22 * z - betta2
+
+    while (True):
+        temp, answ_1 = adams_method_solve(p, q, f, alpha11, alpha12, betta1, x0, xn, n, current_t)
+        temp, answ_2 = adams_method_solve(p, q, f, alpha11, alpha12, betta1, x0, xn, n, -current_t)
+        G_1 = G(answ_1[0][len(answ_1[0]) - 1], answ_1[1][len(answ_1[1]) - 1])
+        G_2 = G(answ_2[0][len(answ_2[0]) - 1], answ_2[1][len(answ_2[1]) - 1])
+        if ((G_1 > 0 and G_2 < 0) or (G_2 > 0 and G_1 < 0)):
+            break
+        current_t = current_t + step
+    return (current_t, -current_t)
+
+
+def shoot_method(p, q, f, alpha11, alpha12, betta1, alpha21, alpha22, betta2, x0, xn, n, eps):
+    # y'=z
+    # z'=f(x)-p(x)z-q(x)y
+
+    # alpha11*y(x0)+alpha12*t=betta1
+    # z(x0)=t
+    def G(y, z):
+        return alpha21 * y - alpha22 * z - betta2
+
+    interval = find_interval(p, q, f, alpha11, alpha12, betta1, alpha21, alpha22, betta2, x0, xn, n, 1, 1)
+    while (True):
+        current_t = (interval[0] + interval[1]) / 2
+        x, answ = adams_method_solve(p, q, f, alpha11, alpha12, betta1, x0, xn, n, current_t)
+        G_answ = G(answ[0][len(answ[0]) - 1], answ[1][len(answ[1]) - 1])
+        if (fabs(G_answ) <= eps):
+            break
+        if (G_answ > 0):
+            interval = (interval[0], current_t)
+        if (G_answ < 0):
+            interval = (current_t, interval[1])
+    return x, answ[0]
