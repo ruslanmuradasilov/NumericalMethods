@@ -45,10 +45,10 @@ def heat_conduct_equation_implicit_scheme(a_coef, T, m, l, n, uxt0, ux0t, uxnt):
         u[j][len(x) - 1] = uxnt(t[j])
 
     alpha = a_coef * tau / (h ** 2)
-    a_coef = np.ones(n) * alpha
+    a = np.ones(n) * alpha
     b = np.ones(n)*(-1 - 2*alpha)
     c = np.ones(n)*alpha
-    a_coef[1] = 0
+    a[1] = 0
     c[n - 1] = 0
 
     # print(len(a), len(b), len(c))
@@ -58,7 +58,7 @@ def heat_conduct_equation_implicit_scheme(a_coef, T, m, l, n, uxt0, ux0t, uxnt):
         for j in range(2, n - 1):
             d[j] = -u[i][j]
         d[n - 1] = -(u[i][n - 1] + alpha*uxnt(t[i + 1]))
-        u[i + 1, 1:u.shape[1] - 1] = tridiagonal_matrix_algorithm(a_coef[1:], b[1:], c[1:], d[1:])
+        u[i + 1, 1:u.shape[1] - 1] = tridiagonal_matrix_algorithm(a[1:], b[1:], c[1:], d[1:])
     # print (d.shape[0])
     return t, x, u
 

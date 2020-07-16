@@ -86,12 +86,12 @@ def find_interval(p, q, f, alpha11, alpha12, betta1, alpha21, alpha22, betta2, x
     def G(y, z):
         return alpha21 * y - alpha22 * z - betta2
 
-    while (True):
+    while True:
         temp, answ_1 = adams_method_solve(p, q, f, alpha11, alpha12, betta1, x0, xn, n, current_t)
         temp, answ_2 = adams_method_solve(p, q, f, alpha11, alpha12, betta1, x0, xn, n, -current_t)
         G_1 = G(answ_1[0][len(answ_1[0]) - 1], answ_1[1][len(answ_1[1]) - 1])
         G_2 = G(answ_2[0][len(answ_2[0]) - 1], answ_2[1][len(answ_2[1]) - 1])
-        if ((G_1 > 0 and G_2 < 0) or (G_2 > 0 and G_1 < 0)):
+        if (G_1 > 0 and G_2 < 0) or (G_2 > 0 and G_1 < 0):
             break
         current_t = current_t + step
     return (current_t, -current_t)
@@ -107,7 +107,7 @@ def shoot_method(p, q, f, alpha11, alpha12, betta1, alpha21, alpha22, betta2, x0
         return alpha21 * y - alpha22 * z - betta2
 
     interval = find_interval(p, q, f, alpha11, alpha12, betta1, alpha21, alpha22, betta2, x0, xn, n, 1, 1)
-    while (True):
+    while True:
         current_t = (interval[0] + interval[1]) / 2
         x, answ = adams_method_solve(p, q, f, alpha11, alpha12, betta1, x0, xn, n, current_t)
         G_answ = G(answ[0][len(answ[0]) - 1], answ[1][len(answ[1]) - 1])

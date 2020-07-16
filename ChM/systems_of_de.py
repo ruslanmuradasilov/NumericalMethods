@@ -222,7 +222,6 @@ def method_of_adams_fourth_order_with_runge_kutta_fourth_order(multifunctions, n
             func_answers[0][i + 1] = y0[0][i + 1]
             func_answers[1][i + 1] = y0[1][i + 1]
 
-        print(y0)
         for j in range(4, n + 1):
             for i in range(func_answers.shape[0]):
                 func_answers[i][j] = func_answers[i][j - 1] + h * (

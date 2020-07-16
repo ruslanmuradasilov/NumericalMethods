@@ -148,17 +148,17 @@ def accuracy(answer, real):
 
 
 def p(x):
-    return x
+    return -0.5 * x**2
     # return tan(x)
 
 
 def q(x):
-    return -0.5 / x
+    return 2
     # return cos(x) ** 2
 
 
 def f(x):
-    return 1
+    return x ** 2
     # return 0
 
 
@@ -180,13 +180,15 @@ def f(x):
 # plt.plot(x, y)
 # plt.show()
 
-x0 = 0.7
-xn = 1
-h = 0.01
-n = trunc((xn - x0) / h)
-x, y = diff_2_equations.shoot_method(p=p, q=q, f=f, alpha11=1, alpha12=0, betta1=0.5, alpha21=2, alpha22=3, betta2=1.2, x0=x0, xn=xn,
-                    n=n, eps=1e-7)
-print(x, y)
+# x0 = 0.6
+# xn = 1.9
+# h = 0.01
+# n = trunc((xn - x0) / h)
+# x, y = diff_2_equations.shoot_method(p=p, q=q, f=f, alpha11=1, alpha12=0.7, betta1=2, alpha21=1, alpha22=0, betta2=0.8, x0=x0, xn=xn,
+#                     n=n, eps=1e-7)
+#
+# for i in range(len(x)):
+#     print(f'y({x[i]}) = {y[i]}')
 
 
 #                                         Heat-conduct equation
@@ -195,24 +197,25 @@ print(x, y)
 # 0 <= x <= l, 0 <= t <= T, n, m
 # u(x, 0) = f(x)
 # u(0, t) = fi(t), u(l, t) = psi(t)
-#
-# def uxt0(x):
-#     return cos(2 * x)
-#     # return cos(2*x)
-#
-#
-# def ux0t(t):
-#     return 0
-#     # return 1 - 6*t
-#
-#
-# def uxnt(t):
-#     return 0
-#     # return 0.3624
-#
-#
+
+def uxt0(x):
+    return x * (0.3 + 2 * x)
+    # return cos(2*x)
+
+
+def ux0t(t):
+    return 0
+    # return 1 - 6*t
+
+
+def uxnt(t):
+    return 6 * t + 0.9
+    # return 0.3624
+
+
 # # t, x, u = partial_diff_equations.heat_conduct_equation_explicit_scheme(a_coef=4, T=10, m=100, l=2, n=20, uxt0 = uxt0, ux0t=ux0t, uxnt=uxnt)
-# # t, x, u = partial_diff_equations.heat_conduct_equation_implicit_scheme(a_coef=4, T=10, m=100, l=2, n=20, uxt0 = uxt0, ux0t=ux0t, uxnt=uxnt)
+# t, x, u = partial_diff_equations.heat_conduct_equation_implicit_scheme(a_coef=1, T=3, m=300, l=0.6, n=30, uxt0=uxt0, ux0t=ux0t, uxnt=uxnt)
+# print(u)
 # t, x, u = partial_diff_equations.heat_conduct_equation_implicit_scheme_common(a_coef=1, T=10, m=100, l=pi, n=100, uxt0=uxt0, ux0t=ux0t, uxnt=uxnt, beta=1, delta=1)
 # # t, x, u = partial_diff_equations.heat_conduct_equation_implicit_scheme_common(a_coef=1, T=3, m=300, l=0.6, n=30, uxt0=uxt0, ux0t=ux0t, uxnt=uxnt, beta=1, delta=1)
 # # t, x, u = partial_diff_equations.heat_conduct_equation_semi_explicit_scheme(a_coef=4, T=10, m=100, l=2, n=20, uxt0=uxt0, ux0t=ux0t, uxnt=uxnt, teta=0.75)
@@ -240,31 +243,34 @@ print(x, y)
 # u(x, 0) = f(x)
 # du(x, 0)/dt = F(x)
 # u(0, t) = fi(t), u(l, t) = psi(t)
-#
+
 # def uxt0(x):
 #     # return x * (pi - x)
 #     # return sin(3 * x)
-#     return x * (x + 1)
+#     # return x * (x + 1)
+#     return (1 - x**2) * cos(pi * x)
 #
 #
 # def duxt0dt(x):
 #     # return 0
-#     return cos(x)
+#     # return cos(x)
+#     return 2 * x + 0.6
 #
 #
 # def ux0t(t):
-#     return 0
+#     return 1 + 0.4 * t
 #
 #
 # def uxnt(t):
-#     # return 0
-#     return 2 * (t + 1)
-#
+#     # return 2 * (t + 1)
+#     return 0
+
+# t, x, u = partial_diff_equations.wave_equation_implicit_scheme(a_coef=1, T=4, m=400, l=1, n=100, uxt0=uxt0, duxt0dt=duxt0dt, ux0t=ux0t, uxnt=uxnt)
+# print(u)
 # t, x, u = partial_diff_equations.wave_equation_implicit_scheme_common(a_coef=1, T=4, m=400, l=1, n=100, uxt0=uxt0, duxt0dt=duxt0dt, ux0t=ux0t, uxnt=uxnt, beta=1, delta=1)
 # # t, x, u = partial_diff_equations.wave_equation_implicit_scheme_common(a_coef=1, T=0.1, m=400, l=pi, n=1000, uxt0=uxt0, duxt0dt=duxt0dt, ux0t=ux0t, uxnt=uxnt, beta=1, delta=1)
 # # t, x, u = partial_diff_equations.wave_equation_implicit_scheme_common(a_coef=1, T=5*pi/18, m=5, l=pi, n=9, uxt0=uxt0, duxt0dt=duxt0dt, ux0t=ux0t, uxnt=uxnt, beta=1, delta=1)
 #
-# # print(u)
 # xgrid, tgrid = np.meshgrid(x, t)
 # ureal = np.zeros((len(t), len(x)))
 # for i in range(ureal.shape[0]):
